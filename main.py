@@ -1,9 +1,16 @@
 import pygame 
 import sys
+from sfondo import sfondo
+
 
 pygame.init()
-display = pygame.display.set_mode((800,1000))
-pygame.display.set_caption("ladro")
+window_size = (1200, 800)
+screen = pygame.display.set_mode(window_size,0,32)
+Display = pygame.Surface((900, 600))
+
+pygame.display.set_caption("survival")
+
+Sfondo = sfondo(Display)
 
 while True:
     for event in pygame.event.get():
@@ -11,3 +18,5 @@ while True:
             pygame.quit()
             sys.exit() 
     pygame.display.update()
+    Sfondo.draw()
+    
