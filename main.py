@@ -1,62 +1,55 @@
-import pygame 
-import sys
-from math import ceil
+import pygame, sys
+from pygame.locals import*
+from piattaforma import Piattaforma
+from ladro import Ladro
 
-# schermata
-pygame.init()
-screen_width = 1000
-screen_height = 1000
 
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("survival")
+window_size=(900,700)
+screen=pygame.display.set_mode(window_size)
+display=pygame.Surface((900,700))
+piattaforma=Piattaforma(display)
 
-#sfondo
-foto = pygame.image.load("sfondo1.webp")
-foto = pygame.transform.scale(foto, (1000, 800))
-screen.blit(foto, (0,0))
+pygame.display.set_caption('Survival')
 
-#griglia
-size_cella = 100 
+clock=pygame.time.Clock()
+fps=60
 
-class Mondo():
-    def __init__(self, mappa):
-        
-        self.griglia_list = []
-        
-        #immagini
-        cubo_foto=pygame.image.load("cubo.webp")
-        
-        criga = 0
-        for riga in mappa:
-            ccolonna = 0
-            for cella in riga:
-                if cella == 1:
-                    img =  pygame.transform.scale(cubo_foto, (size_cella, size_cella))
-                    img_rect = img.get_rect()
-                    img_rect.x = ccolonna * size_cella 
-                    img_rect.y = criga * size_cella 
-                    cella = (img, img_rect)
-                    self.griglia_list.append(cella)
-                ccolonna += 1
-            criga += 1
-            
-    def draw(self):
-        for cella in self.griglia_list:
-            screen.blit(cella[0], cella[1])
+player=Ladro(screen,piattaforma,(100,100),(100,200))
+# def move():
+#         movement_types= {'top': False, 'bottom': False, 'right': False, 'left': False}
 
-with open("map.txt") as f:
-    mappa = [list(map(int, riga.strip().split())) for riga in f] 
-
-mondo = Mondo(mappa)
 while True:
     
-    print(mondo.griglia_list)
-    mondo.draw()
+
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type==QUIT:
             pygame.quit()
-            sys.exit() 
-            
+            sys.exit()
+    
+    keys=pygame.key.get_pressed()
+    if keys[K_RIGHT]:
+        player.move_r()
+    else:
+        player.stop_move_r()
+    if keys[K_LEFT]:
+        player.move_l()
+    else:
+        player.stop_move_l()
+    if keys[K_SPACE]:
+        player.salto()
+
+    piattaforma.crea()
+
+    surf = pygame.transform.scale(display, window_size)
+    screen.blit(surf, (0,0))
+    player.move()
+
+    player.draw()
+
     pygame.display.update()
+    clock.tick(fps)
+
     
-    
+
+
+       
