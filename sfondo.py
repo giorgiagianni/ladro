@@ -19,9 +19,11 @@ class sfondo():
                 if cella !=0:
                     self.griglia.append(pygame.Rect(x*self.l_cella, y*self.h_cella))
                     
-    def draw(self):
+    # def draw(self):
         self.display.update(self.grass)
         for y, riga in enumerate(self.mappa):
             for x, cella in enumerate(riga):
                 if cella == 1:
                     self.display.blit(self.cubo, (x*self.l_cella, y*self.h_cella))
+
+
